@@ -3,6 +3,7 @@
 import { QRCode } from '.prisma/client'
 import { CreateQRCodeModal } from '@/app/_components/CreateQRCodeModal'
 import { Map } from '@/app/_components/Map'
+import { ShowQRCodeModal } from '@/app/_components/ShowQRCodeModal'
 import { Database } from '@/app/_types/supabase'
 import {
   AppShell,
@@ -19,10 +20,7 @@ import { useEffect, useState } from 'react'
 
 export default function Home() {
   const [opened, { toggle }] = useDisclosure()
-
-  const [qrcodes, setQRCodes] = useState<
-    Omit<QRCode, 'createdAt' | 'updatedAt'>[]
-  >([])
+  const [qrcodes, setQRCodes] = useState<QRCode[]>([])
 
   useEffect(() => {
     const fetch = async () => {
@@ -30,7 +28,13 @@ export default function Home() {
       const { data } = await supabase.from('qrcodes').select()
 
       if (data) {
-        setQRCodes(data)
+        setQRCodes(
+          data.map((qrcode) => ({
+            ...qrcode,
+            createdAt: new Date(qrcode.created_at),
+            updatedAt: new Date(qrcode.updated_at),
+          })),
+        )
       }
     }
 
@@ -60,10 +64,16 @@ export default function Home() {
         />
         <Divider my={'sm'} />
         {qrcodes.map((qrcode) => (
-          <NavLink
-            className={'font-medium'}
+          <ShowQRCodeModal
             key={qrcode.id}
-            label={qrcode.name}
+            qrcode={qrcode}
+            renderTrigger={(props) => (
+              <NavLink
+                className={'font-medium'}
+                label={qrcode.name}
+                {...props}
+              />
+            )}
           />
         ))}
       </AppShell.Navbar>
