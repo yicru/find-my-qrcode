@@ -1,5 +1,6 @@
 'use client'
 
+import { CreateQRCodeModal } from '@/app/_components/CreateQRCodeModal'
 import { Map } from '@/app/_components/Map'
 import { AppShell, Burger, Button, Group, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
@@ -24,7 +25,9 @@ export default function Home() {
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p={'md'}>
-        <Button>QRコードを作成</Button>
+        <CreateQRCodeModal
+          renderTrigger={(props) => <Button {...props}>QRコードを作成</Button>}
+        />
       </AppShell.Navbar>
       <AppShell.Main p={0}>
         <Map className={'h-screen w-screen'} />
