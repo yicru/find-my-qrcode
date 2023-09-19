@@ -27,7 +27,6 @@
     "@mantine/nprogress": "^7.0.0",
     "@mantine/spotlight": "^7.0.0",
     "@mantine/tiptap": "^7.0.0",
-    "@mapbox/mapbox-gl-language": "^1.0.1",
     "@tabler/icons-react": "^2.34.0",
     "@tiptap/extension-link": "^2.1.10",
     "@tiptap/react": "^2.1.10",
