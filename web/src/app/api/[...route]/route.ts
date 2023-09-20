@@ -1,10 +1,11 @@
+import { prisma } from '@/server/lib/prisma'
 import { Hono } from 'hono'
 
 const app = new Hono().basePath('/api')
 
-const route = app.get('/hello', (c) => {
+const route = app.get('/qrcodes', async (c) => {
   return c.jsonT({
-    message: 'Hello Next.js!',
+    data: await prisma.qrcode.findMany(),
   })
 })
 

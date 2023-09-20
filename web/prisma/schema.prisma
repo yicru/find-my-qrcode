@@ -10,7 +10,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model QRCode {
+model Qrcode {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
   name String

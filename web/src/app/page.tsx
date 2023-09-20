@@ -1,11 +1,9 @@
 'use client'
 
-import { QRCode } from '.prisma/client'
 import { CreateQRCodeModal } from '@/client/components/CreateQRCodeModal'
 import { Map } from '@/client/components/Map'
 import { ShowQRCodeModal } from '@/client/components/ShowQRCodeModal'
 import { client } from '@/client/lib/client'
-import { Database } from '@/shared/types/supabase'
 import {
   AppShell,
   Burger,
@@ -16,37 +14,15 @@ import {
   Text,
 } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useEffect, useState } from 'react'
 import useSWR from 'swr'
 
 export default function Home() {
   const [opened, { toggle }] = useDisclosure()
-  const [qrcodes, setQRCodes] = useState<QRCode[]>([])
 
-  const { data } = useSWR('/api/hello', async () => {
-    const result = await client.api.hello.$get()
+  const { data } = useSWR('qrcodes', async () => {
+    const result = await client.api.qrcodes.$get()
     return await result.json()
   })
-
-  useEffect(() => {
-    const fetch = async () => {
-      const supabase = createClientComponentClient<Database>()
-      const { data } = await supabase.from('qrcodes').select()
-
-      if (data) {
-        setQRCodes(
-          data.map((qrcode) => ({
-            ...qrcode,
-            createdAt: new Date(qrcode.created_at),
-            updatedAt: new Date(qrcode.updated_at),
-          })),
-        )
-      }
-    }
-
-    fetch()
-  }, [])
 
   return (
     <AppShell
@@ -63,7 +39,6 @@ export default function Home() {
             size={'sm'}
           />
           <Text className={'font-black text-gray-700'}>Find My QRCode</Text>
-          <Text>{data?.message}</Text>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p={'md'}>
@@ -71,7 +46,7 @@ export default function Home() {
           renderTrigger={(props) => <Button {...props}>QRコードを作成</Button>}
         />
         <Divider my={'sm'} />
-        {qrcodes.map((qrcode) => (
+        {data?.data.map((qrcode) => (
           <ShowQRCodeModal
             key={qrcode.id}
             qrcode={qrcode}
