@@ -1,0 +1,9 @@
+# This file was generated. Do not edit manually.
+
+schema {
+    query: Query
+}
+
+type Query {
+    greetings: String
+}

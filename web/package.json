@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "run-p dev:*",
+    "dev:next": "next dev",
+    "dev:graphql": "graphql-codegen --watch",
     "build": "next build",
     "start": "next start",
     "lint": "run-s lint:* -c",
@@ -44,6 +46,8 @@
     "embla-carousel-react": "^7.1.0",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
+    "graphql": "^16.8.1",
+    "graphql-yoga": "^4.0.4",
     "mapbox-gl": "^3.0.0-beta.2",
     "next": "13.4.19",
     "react": "18.2.0",
@@ -51,9 +55,12 @@
     "react-qr-code": "^2.0.12",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
+    "urql": "^4.0.5",
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "^5.0.0",
+    "@graphql-codegen/client-preset": "^4.1.0",
     "@types/mapbox-gl": "^2.7.14",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
     "@typescript-eslint/parser": "^6.7.2",
