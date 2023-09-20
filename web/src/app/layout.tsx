@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 
-import { UrqlProvider } from '@/client/providers/UrqlProvider'
 import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
 import { Noto_Sans_JP } from 'next/font/google'
@@ -30,9 +29,7 @@ export default function RootLayout({
         <ColorSchemeScript />
       </head>
       <body className={notSansJP.className}>
-        <MantineProvider>
-          <UrqlProvider>{children}</UrqlProvider>
-        </MantineProvider>
+        <MantineProvider>{children}</MantineProvider>
       </body>
     </html>
   )
