@@ -30,6 +30,38 @@ const route = app
       })
     },
   )
+  .post(
+    '/qrcodes/:id/find',
+    zValidator(
+      'param',
+      z.object({
+        id: z.string().min(1),
+      }),
+    ),
+    zValidator(
+      'json',
+      z.object({
+        latitude: z.number(),
+        longitude: z.number(),
+      }),
+    ),
+    async (c) => {
+      const param = c.req.valid('param')
+      const json = c.req.valid('json')
+
+      return c.jsonT({
+        data: await prisma.findLocation.create({
+          data: {
+            latitude: json.latitude,
+            longitude: json.longitude,
+            qrcode: {
+              connect: { id: param.id },
+            },
+          },
+        }),
+      })
+    },
+  )
 
 const fetch = app.fetch
 

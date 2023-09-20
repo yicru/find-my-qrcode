@@ -1,16 +1,18 @@
-import { QRCode } from '.prisma/client'
+import { Qrcode } from '.prisma/client'
 import { Button, Center, Group, Modal, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { ReactElement } from 'react'
 import ReactQRCode from 'react-qr-code'
 
 type Props = {
-  qrcode: QRCode
+  qrcode: Qrcode
   renderTrigger: (props: { onClick: () => void }) => ReactElement
 }
 
 export function ShowQRCodeModal({ qrcode, renderTrigger }: Props) {
   const [opened, { close, open }] = useDisclosure(false)
+
+  const url = process.env.NEXT_PUBLIC_APP_ORIGIN + '/find/' + qrcode.id
 
   return (
     <>
@@ -21,7 +23,7 @@ export function ShowQRCodeModal({ qrcode, renderTrigger }: Props) {
         title={<Text fw={'bold'}>{qrcode.name}</Text>}
       >
         <Center>
-          <ReactQRCode value={qrcode.id} />
+          <ReactQRCode value={url} />
         </Center>
 
         <Group justify={'flex-end'} mt={'md'}>

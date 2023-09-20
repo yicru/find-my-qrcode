@@ -18,5 +18,22 @@ model Qrcode {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
 
+  FindLocation FindLocation[]
+
   @@map("qrcodes")
+}
+
+model FindLocation {
+  id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+
+  qrcodeId String @map("qrcode_id") @db.Uuid
+  qrcode   Qrcode @relation(fields: [qrcodeId], references: [id])
+
+  latitude  Float
+  longitude Float
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@map("find_locations")
 }
