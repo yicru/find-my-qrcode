@@ -4,6 +4,7 @@ import { QRCode } from '.prisma/client'
 import { CreateQRCodeModal } from '@/client/components/CreateQRCodeModal'
 import { Map } from '@/client/components/Map'
 import { ShowQRCodeModal } from '@/client/components/ShowQRCodeModal'
+import { client } from '@/client/lib/client'
 import { Database } from '@/shared/types/supabase'
 import {
   AppShell,
@@ -17,10 +18,16 @@ import {
 import { useDisclosure } from '@mantine/hooks'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 export default function Home() {
   const [opened, { toggle }] = useDisclosure()
   const [qrcodes, setQRCodes] = useState<QRCode[]>([])
+
+  const { data } = useSWR('/api/hello', async () => {
+    const result = await client.api.hello.$get()
+    return await result.json()
+  })
 
   useEffect(() => {
     const fetch = async () => {
@@ -56,6 +63,7 @@ export default function Home() {
             size={'sm'}
           />
           <Text className={'font-black text-gray-700'}>Find My QRCode</Text>
+          <Text>{data?.message}</Text>
         </Group>
       </AppShell.Header>
       <AppShell.Navbar p={'md'}>
