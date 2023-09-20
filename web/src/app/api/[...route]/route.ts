@@ -62,6 +62,11 @@ const route = app
       })
     },
   )
+  .get('/find-locations', async (c) => {
+    return c.jsonT({
+      data: await prisma.findLocation.findMany(),
+    })
+  })
 
 const fetch = app.fetch
 
