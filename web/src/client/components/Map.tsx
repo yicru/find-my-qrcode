@@ -1,6 +1,7 @@
 'use client'
 
 import { client } from '@/client/lib/client'
+import 'mapbox-gl/dist/mapbox-gl.css'
 import ReactMapGl, { Marker } from 'react-map-gl'
 import useSWR from 'swr'
 
