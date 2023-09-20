@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "run-s build:prisma build:next",
+    "build:prisma": "prisma generate",
+    "build:next": "next build",
     "start": "next start",
     "lint": "run-s lint:* -c",
     "lint:eslint": "eslint --ext .js,.jsx,.mjs,.ts,.tsx --max-warnings 0 .",
