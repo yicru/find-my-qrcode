@@ -17,7 +17,8 @@ import { useDisclosure } from '@mantine/hooks'
 import useSWR from 'swr'
 
 export default function Home() {
-  const [opened, { toggle }] = useDisclosure()
+  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure()
+  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true)
 
   const { data } = useSWR('qrcodes', async () => {
     const result = await client.api.qrcodes.$get()
@@ -27,16 +28,26 @@ export default function Home() {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ breakpoint: 'sm', collapsed: { mobile: !opened }, width: 300 }}
+      navbar={{
+        breakpoint: 'sm',
+        collapsed: { desktop: !desktopOpened, mobile: !mobileOpened },
+        width: 300,
+      }}
       padding={'md'}
     >
       <AppShell.Header>
         <Group h={'100%'} px={'md'}>
           <Burger
             hiddenFrom={'sm'}
-            onClick={toggle}
-            opened={opened}
+            onClick={toggleMobile}
+            opened={mobileOpened}
             size={'sm'}
+          />
+          <Burger
+            onClick={toggleDesktop}
+            opened={desktopOpened}
+            size={'sm'}
+            visibleFrom={'sm'}
           />
           <Text className={'font-black text-gray-700'}>Find My QRCode</Text>
         </Group>
