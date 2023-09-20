@@ -1,4 +1,4 @@
-import { Database } from '@/app/_types/supabase'
+import { Database } from '@/shared/types/supabase'
 import { Button, Group, Modal, Text, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'

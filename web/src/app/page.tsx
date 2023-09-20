@@ -1,10 +1,10 @@
 'use client'
 
 import { QRCode } from '.prisma/client'
-import { CreateQRCodeModal } from '@/app/_components/CreateQRCodeModal'
-import { Map } from '@/app/_components/Map'
-import { ShowQRCodeModal } from '@/app/_components/ShowQRCodeModal'
-import { Database } from '@/app/_types/supabase'
+import { CreateQRCodeModal } from '@/client/components/CreateQRCodeModal'
+import { Map } from '@/client/components/Map'
+import { ShowQRCodeModal } from '@/client/components/ShowQRCodeModal'
+import { Database } from '@/shared/types/supabase'
 import {
   AppShell,
   Burger,
