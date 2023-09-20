@@ -1,9 +1,9 @@
-import { Database } from '@/shared/types/supabase'
+import { client } from '@/client/lib/client'
 import { Button, Group, Modal, Text, TextInput } from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { ReactElement } from 'react'
+import { useSWRConfig } from 'swr'
 import { z } from 'zod'
 
 const schema = z.object({
@@ -19,6 +19,8 @@ type Props = {
 export function CreateQRCodeModal({ renderTrigger }: Props) {
   const [opened, { close, open }] = useDisclosure(false)
 
+  const { mutate } = useSWRConfig()
+
   const form = useForm<FormValues>({
     initialValues: {
       name: '',
@@ -27,14 +29,17 @@ export function CreateQRCodeModal({ renderTrigger }: Props) {
   })
 
   const handleSubmit = async (values: FormValues) => {
-    const supabase = createClientComponentClient<Database>()
-
-    const { error } = await supabase
-      .from('qrcodes')
-      .insert([{ name: values.name }])
-
-    if (!error) {
+    try {
+      await client.api.qrcodes.$post({
+        json: {
+          name: values.name,
+        },
+      })
+      await mutate('qrcodes')
+      form.reset()
       close()
+    } catch (e) {
+      console.error(e)
     }
   }
 
