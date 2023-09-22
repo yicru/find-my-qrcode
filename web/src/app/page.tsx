@@ -33,7 +33,7 @@ export default function Home() {
         <Group className={'justify-between px-2'}>
           <Text className={'font-bold text-neutral-700'}>QRコード一覧</Text>
           <CreateQRCodeModal
-            renderTrigger={(props) => <Button {...props}>コードを追加</Button>}
+            renderTrigger={(props) => <Button {...props}>コードを発行</Button>}
           />
         </Group>
 

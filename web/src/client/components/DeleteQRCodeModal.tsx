@@ -3,6 +3,7 @@ import { client } from '@/client/lib/client'
 import { Box, Button, Group, Modal, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { ReactElement, useState } from 'react'
+import { toast } from 'sonner'
 import { useSWRConfig } from 'swr'
 
 type Props = {
@@ -26,6 +27,7 @@ export function DeleteQRCodeModal({ qrcode, renderTrigger }: Props) {
       })
       await mutate('qrcodes')
       close()
+      toast.success('QRコードを削除しました')
     } catch (e) {
       console.error(e)
     } finally {

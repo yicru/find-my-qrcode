@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { ColorSchemeScript, MantineProvider } from '@mantine/core'
 import '@mantine/core/styles.css'
 import { Noto_Sans_JP } from 'next/font/google'
+import { Toaster } from 'sonner'
 
 import './globals.css'
 
@@ -31,6 +32,7 @@ export default function RootLayout({
       </head>
       <body>
         <MantineProvider>{children}</MantineProvider>
+        <Toaster className={'font-medium'} />
       </body>
     </html>
   )

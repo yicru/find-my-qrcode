@@ -14,6 +14,7 @@ import {
 import { useForm, zodResolver } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
 import { ReactElement, useState } from 'react'
+import { toast } from 'sonner'
 import { useSWRConfig } from 'swr'
 import { z } from 'zod'
 
@@ -60,6 +61,7 @@ export function CreateQRCodeModal({ renderTrigger }: Props) {
       await mutate('qrcodes')
       form.reset()
       close()
+      toast.success('QRコードを発行しました')
     } catch (e) {
       console.error(e)
     } finally {
@@ -75,7 +77,7 @@ export function CreateQRCodeModal({ renderTrigger }: Props) {
         opened={opened}
         title={
           <Text className={'font-bold text-neutral-600'}>
-            QRコードを作成する
+            QRコードを発行する
           </Text>
         }
       >
@@ -130,7 +132,7 @@ export function CreateQRCodeModal({ renderTrigger }: Props) {
               キャンセル
             </Button>
             <Button loading={isLoading} type={'submit'}>
-              作成
+              発行
             </Button>
           </Group>
         </form>
