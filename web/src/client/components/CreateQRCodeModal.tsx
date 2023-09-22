@@ -73,7 +73,11 @@ export function CreateQRCodeModal({ renderTrigger }: Props) {
       <Modal
         onClose={close}
         opened={opened}
-        title={<Text fw={'bold'}>QRコードを作成する</Text>}
+        title={
+          <Text className={'font-bold text-neutral-600'}>
+            QRコードを作成する
+          </Text>
+        }
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
           <Popover
