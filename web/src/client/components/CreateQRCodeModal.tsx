@@ -29,6 +29,7 @@ type Props = {
 }
 
 export function CreateQRCodeModal({ renderTrigger }: Props) {
+  const [isLoading, setIsLoading] = useState(false)
   const [opened, { close, open }] = useDisclosure(false)
   const [openedEmoji, setOpenedEmoji] = useState(false)
 
@@ -48,6 +49,7 @@ export function CreateQRCodeModal({ renderTrigger }: Props) {
   }
 
   const handleSubmit = async (values: FormValues) => {
+    setIsLoading(true)
     try {
       await client.api.qrcodes.$post({
         json: {
@@ -60,6 +62,8 @@ export function CreateQRCodeModal({ renderTrigger }: Props) {
       close()
     } catch (e) {
       console.error(e)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -113,10 +117,17 @@ export function CreateQRCodeModal({ renderTrigger }: Props) {
           />
 
           <Group justify={'flex-end'} mt={'md'}>
-            <Button onClick={close} type={'button'} variant={'default'}>
+            <Button
+              disabled={isLoading}
+              onClick={close}
+              type={'button'}
+              variant={'default'}
+            >
               キャンセル
             </Button>
-            <Button type={'submit'}>作成</Button>
+            <Button loading={isLoading} type={'submit'}>
+              作成
+            </Button>
           </Group>
         </form>
       </Modal>
