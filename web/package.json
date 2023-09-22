@@ -19,6 +19,8 @@
     "supabase:gen-types": "supabase gen types typescript --local > src/app/_types/supabase.ts"
   },
   "dependencies": {
+    "@emoji-mart/data": "^1.1.2",
+    "@emoji-mart/react": "^1.1.1",
     "@hono/zod-validator": "^0.1.8",
     "@mantine/carousel": "^7.0.0",
     "@mantine/code-highlight": "^7.0.0",
@@ -45,6 +47,7 @@
     "autoprefixer": "10.4.15",
     "dayjs": "^1.11.10",
     "embla-carousel-react": "^7.1.0",
+    "emoji-mart": "^5.5.2",
     "eslint": "8.49.0",
     "eslint-config-next": "13.4.19",
     "hono": "^3.6.3",

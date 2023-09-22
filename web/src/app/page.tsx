@@ -65,6 +65,7 @@ export default function Home() {
               <NavLink
                 className={'font-medium'}
                 label={qrcode.name}
+                leftSection={qrcode.emoji}
                 {...props}
               />
             )}

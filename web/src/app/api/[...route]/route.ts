@@ -16,15 +16,17 @@ const route = app
     zValidator(
       'json',
       z.object({
+        emoji: z.string(),
         name: z.string().min(1),
       }),
     ),
     async (c) => {
-      const data = c.req.valid('json')
+      const json = c.req.valid('json')
       return c.jsonT({
         data: await prisma.qrcode.create({
           data: {
-            name: data.name,
+            emoji: json.emoji,
+            name: json.name,
           },
         }),
       })

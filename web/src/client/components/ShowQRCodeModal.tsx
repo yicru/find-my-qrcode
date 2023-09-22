@@ -1,5 +1,5 @@
 import { Qrcode } from '.prisma/client'
-import { Button, Center, Group, Modal, Text } from '@mantine/core'
+import { Anchor, Button, Center, Group, Modal, Text } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { ReactElement } from 'react'
 import ReactQRCode from 'react-qr-code'
@@ -20,10 +20,29 @@ export function ShowQRCodeModal({ qrcode, renderTrigger }: Props) {
       <Modal
         onClose={close}
         opened={opened}
-        title={<Text fw={'bold'}>{qrcode.name}</Text>}
+        title={
+          <Text>
+            {qrcode.emoji && (
+              <Text className={'mr-2'} component={'span'}>
+                {qrcode.emoji}
+              </Text>
+            )}
+            <Text component={'span'} fw={'bold'}>
+              {qrcode.name}
+            </Text>
+          </Text>
+        }
       >
-        <Center>
+        <Center className={'flex-col'}>
           <ReactQRCode value={url} />
+
+          <Anchor
+            className={'mt-4 text-xs text-blue-600'}
+            href={url}
+            target={'_blank'}
+          >
+            {url}
+          </Anchor>
         </Center>
 
         <Group justify={'flex-end'} mt={'md'}>

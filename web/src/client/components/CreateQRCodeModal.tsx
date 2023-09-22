@@ -1,12 +1,24 @@
 import { client } from '@/client/lib/client'
-import { Button, Group, Modal, Text, TextInput } from '@mantine/core'
+import data from '@emoji-mart/data'
+import i18n from '@emoji-mart/data/i18n/ja.json'
+import Picker from '@emoji-mart/react'
+import {
+  Button,
+  Center,
+  Group,
+  Modal,
+  Popover,
+  Text,
+  TextInput,
+} from '@mantine/core'
 import { useForm, zodResolver } from '@mantine/form'
 import { useDisclosure } from '@mantine/hooks'
-import { ReactElement } from 'react'
+import { ReactElement, useState } from 'react'
 import { useSWRConfig } from 'swr'
 import { z } from 'zod'
 
 const schema = z.object({
+  emoji: z.string(),
   name: z.string().min(1, { message: '1文字以上で入力してください' }),
 })
 
@@ -18,20 +30,28 @@ type Props = {
 
 export function CreateQRCodeModal({ renderTrigger }: Props) {
   const [opened, { close, open }] = useDisclosure(false)
+  const [openedEmoji, setOpenedEmoji] = useState(false)
 
   const { mutate } = useSWRConfig()
 
   const form = useForm<FormValues>({
     initialValues: {
+      emoji: '',
       name: '',
     },
     validate: zodResolver(schema),
   })
 
+  const onEmojiSelected = (emoji: string) => {
+    form.setValues({ ...form.values, emoji })
+    setOpenedEmoji(false)
+  }
+
   const handleSubmit = async (values: FormValues) => {
     try {
       await client.api.qrcodes.$post({
         json: {
+          emoji: values.emoji,
           name: values.name,
         },
       })
@@ -52,6 +72,39 @@ export function CreateQRCodeModal({ renderTrigger }: Props) {
         title={<Text fw={'bold'}>QRコードを作成する</Text>}
       >
         <form onSubmit={form.onSubmit(handleSubmit)}>
+          <Popover
+            onChange={setOpenedEmoji}
+            opened={openedEmoji}
+            position={'bottom'}
+            width={352}
+            withArrow
+          >
+            <Popover.Target>
+              <Center>
+                <Center
+                  className={
+                    'h-20 w-20 cursor-pointer rounded-full bg-gray-200 p-3'
+                  }
+                  onClick={() => setOpenedEmoji(true)}
+                >
+                  <Text className={'text-4xl'}>{form.values.emoji}</Text>
+                </Center>
+              </Center>
+            </Popover.Target>
+            <Popover.Dropdown
+              className={'border-none bg-transparent p-0 shadow-lg'}
+            >
+              <Picker
+                data={data}
+                i18n={i18n}
+                onEmojiSelect={(data: { native: string }) =>
+                  onEmojiSelected(data.native)
+                }
+                theme={'light'}
+              />
+            </Popover.Dropdown>
+          </Popover>
+
           <TextInput
             label={'なまえ'}
             placeholder={'例）鍵'}

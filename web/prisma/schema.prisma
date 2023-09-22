@@ -13,7 +13,8 @@ datasource db {
 model Qrcode {
   id String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
 
-  name String
+  emoji String
+  name  String
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
