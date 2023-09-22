@@ -1,8 +1,16 @@
 'use client'
 
+import type mapboxgl from 'mapbox-gl'
+
 import { client } from '@/client/lib/client'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import ReactMapGl, { Marker } from 'react-map-gl'
+import { useEffect, useRef } from 'react'
+import ReactMapGl, {
+  GeolocateControl,
+  Marker,
+  NavigationControl,
+  useMap,
+} from 'react-map-gl'
 import useSWR from 'swr'
 
 type Props = {
@@ -10,6 +18,8 @@ type Props = {
 }
 
 export function Map({ className }: Props) {
+  const { current: map } = useMap()
+
   const { data } = useSWR('find-locations', async () => {
     const result = await client.api['find-locations'].$get()
     return await result.json()
@@ -23,9 +33,19 @@ export function Map({ className }: Props) {
           longitude: 132.4594,
           zoom: 15,
         }}
-        mapStyle={'mapbox://styles/mapbox/streets-v12'}
+        mapStyle={'mapbox://styles/mapbox/light-v11'}
         mapboxAccessToken={process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}
       >
+        <NavigationControl />
+        <GeolocateControl
+          onGeolocate={(e) => {
+            map?.flyTo({
+              center: [e.coords.longitude, e.coords.latitude],
+              zoom: 15,
+            })
+          }}
+        />
+
         {data?.data.map((city, index) => (
           <Marker
             anchor={'bottom'}

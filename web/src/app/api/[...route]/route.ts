@@ -28,6 +28,13 @@ const route = app
             emoji: json.emoji,
             name: json.name,
           },
+          include: {
+            FindLocation: {
+              orderBy: {
+                createdAt: 'desc',
+              },
+            },
+          },
         }),
       })
     },

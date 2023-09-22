@@ -4,77 +4,80 @@ import { CreateQRCodeModal } from '@/client/components/CreateQRCodeModal'
 import { Map } from '@/client/components/Map'
 import { ShowQRCodeModal } from '@/client/components/ShowQRCodeModal'
 import { client } from '@/client/lib/client'
-import {
-  AppShell,
-  Burger,
-  Button,
-  Divider,
-  Group,
-  NavLink,
-  Text,
-} from '@mantine/core'
-import { useDisclosure } from '@mantine/hooks'
+import { Box, Button, Group, Table, Text } from '@mantine/core'
 import useSWR from 'swr'
 
 export default function Home() {
-  const [mobileOpened, { toggle: toggleMobile }] = useDisclosure()
-  const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true)
-
-  const { data } = useSWR('qrcodes', async () => {
+  const { data, isLoading } = useSWR('qrcodes', async () => {
     const result = await client.api.qrcodes.$get()
     return await result.json()
   })
 
   return (
-    <AppShell
-      header={{ height: 60 }}
-      navbar={{
-        breakpoint: 'sm',
-        collapsed: { desktop: !desktopOpened, mobile: !mobileOpened },
-        width: 300,
-      }}
-      padding={'md'}
-    >
-      <AppShell.Header>
-        <Group h={'100%'} px={'md'}>
-          <Burger
-            hiddenFrom={'sm'}
-            onClick={toggleMobile}
-            opened={mobileOpened}
-            size={'sm'}
+    <Box className={'px-6 py-4'}>
+      <Box className={'mx-auto w-full max-w-4xl'}>
+        <Text className={'font-black text-neutral-700'}>Find My QRCode</Text>
+      </Box>
+
+      <Box className={'w-full'}>
+        <Map className={'mt-4 h-96 w-full overflow-hidden rounded-lg'} />
+      </Box>
+
+      <Box className={'mx-auto mt-10 w-full max-w-4xl'}>
+        <Group className={'justify-between px-2'}>
+          <Text className={'font-bold text-neutral-700'}>QRコード一覧</Text>
+          <CreateQRCodeModal
+            renderTrigger={(props) => <Button {...props}>コードを追加</Button>}
           />
-          <Burger
-            onClick={toggleDesktop}
-            opened={desktopOpened}
-            size={'sm'}
-            visibleFrom={'sm'}
-          />
-          <Text className={'font-black text-gray-700'}>Find My QRCode</Text>
         </Group>
-      </AppShell.Header>
-      <AppShell.Navbar p={'md'}>
-        <CreateQRCodeModal
-          renderTrigger={(props) => <Button {...props}>QRコードを作成</Button>}
-        />
-        <Divider my={'sm'} />
-        {data?.data.map((qrcode) => (
-          <ShowQRCodeModal
-            key={qrcode.id}
-            qrcode={qrcode}
-            renderTrigger={(props) => (
-              <NavLink
-                className={'font-medium'}
-                label={qrcode.name}
-                leftSection={qrcode.emoji}
-                {...props}
-              />
+
+        <Table className={'mt-4'}>
+          <Table.Thead>
+            <Table.Tr>
+              <Table.Th className={'text-xs font-medium text-neutral-600'}>
+                なまえ
+              </Table.Th>
+              <Table.Th className={'text-right'} />
+            </Table.Tr>
+          </Table.Thead>
+          <Table.Tbody>
+            {isLoading && (
+              <Table.Tr>
+                <Table.Td className={'text-xs font-medium'}>
+                  読み込み中...
+                </Table.Td>
+              </Table.Tr>
             )}
-          />
-        ))}
-      </AppShell.Navbar>
-      <AppShell.Main p={0}>
-        <Map className={'h-screen w-screen'} />
-      </AppShell.Main>
-    </AppShell>
+            {!isLoading && data?.data.length === 0 && (
+              <Table.Tr>
+                <Table.Td className={'text-xs font-medium'}>
+                  登録済みのQRコードがありません
+                </Table.Td>
+              </Table.Tr>
+            )}
+            {data?.data.map((qrcode) => (
+              <Table.Tr key={qrcode.id}>
+                <Table.Td>
+                  {qrcode.emoji && (
+                    <span className={'mr-2'}>{qrcode.emoji}</span>
+                  )}
+                  <span className={'font-medium'}>{qrcode.name}</span>
+                </Table.Td>
+                <Table.Td className={'text-right'}>
+                  <ShowQRCodeModal
+                    qrcode={qrcode}
+                    renderTrigger={(props) => (
+                      <Button size={'xs'} variant={'light'} {...props}>
+                        QRコードを表示
+                      </Button>
+                    )}
+                  />
+                </Table.Td>
+              </Table.Tr>
+            ))}
+          </Table.Tbody>
+        </Table>
+      </Box>
+    </Box>
   )
 }
