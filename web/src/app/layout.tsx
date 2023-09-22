@@ -6,9 +6,10 @@ import { Noto_Sans_JP } from 'next/font/google'
 
 import './globals.css'
 
-const notSansJP = Noto_Sans_JP({
+const notoSansJP = Noto_Sans_JP({
   display: 'swap',
   subsets: ['latin'],
+  variable: '--noto-sans-jp',
   weight: ['400', '500'],
 })
 
@@ -24,11 +25,11 @@ export default function RootLayout({
 }) {
   // noinspection HtmlRequiredTitleElement
   return (
-    <html lang={'ja'}>
+    <html className={notoSansJP.variable} lang={'ja'}>
       <head>
         <ColorSchemeScript />
       </head>
-      <body className={notSansJP.className}>
+      <body>
         <MantineProvider>{children}</MantineProvider>
       </body>
     </html>
