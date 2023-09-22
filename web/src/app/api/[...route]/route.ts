@@ -73,7 +73,11 @@ const route = app
   )
   .get('/find-locations', async (c) => {
     return c.jsonT({
-      data: await prisma.findLocation.findMany(),
+      data: await prisma.findLocation.findMany({
+        include: {
+          qrcode: true,
+        },
+      }),
     })
   })
 

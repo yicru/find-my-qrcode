@@ -36,11 +36,7 @@ export function ShowQRCodeModal({ qrcode, renderTrigger }: Props) {
         <Center className={'flex-col'}>
           <ReactQRCode value={url} />
 
-          <Anchor
-            className={'mt-4 text-xs text-blue-600'}
-            href={url}
-            target={'_blank'}
-          >
+          <Anchor className={'mt-4 text-xs'} href={url} target={'_blank'}>
             {url}
           </Anchor>
         </Center>

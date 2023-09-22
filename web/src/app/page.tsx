@@ -20,7 +20,11 @@ export default function Home() {
       </Box>
 
       <Box className={'w-full'}>
-        <Map className={'mt-4 h-96 w-full overflow-hidden rounded-lg'} />
+        <Map
+          className={
+            'mt-4 h-96 w-full overflow-hidden rounded-lg bg-neutral-200'
+          }
+        />
       </Box>
 
       <Box className={'mx-auto mt-10 w-full max-w-4xl'}>

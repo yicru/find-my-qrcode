@@ -1,10 +1,9 @@
 'use client'
 
-import type mapboxgl from 'mapbox-gl'
-
 import { client } from '@/client/lib/client'
+import { HoverCard, Text } from '@mantine/core'
+import { format } from 'date-fns'
 import 'mapbox-gl/dist/mapbox-gl.css'
-import { useEffect, useRef } from 'react'
 import ReactMapGl, {
   GeolocateControl,
   Marker,
@@ -46,24 +45,47 @@ export function Map({ className }: Props) {
           }}
         />
 
-        {data?.data.map((city, index) => (
+        {data?.data.map((location, index) => (
           <Marker
             anchor={'bottom'}
             key={`marker-${index}`}
-            latitude={city.latitude}
-            longitude={city.longitude}
+            latitude={location.latitude}
+            longitude={location.longitude}
           >
-            <svg
-              className={'fill-red-600 stroke-0'}
-              height={20}
-              viewBox={'0 0 24 24'}
-            >
-              <path
-                d={`M20.2,15.7L20.2,15.7c1.1-1.6,1.8-3.6,1.8-5.7c0-5.6-4.5-10-10-10S2,4.5,2,10c0,2,0.6,3.9,1.6,5.4c0,0.1,0.1,0.2,0.2,0.3
-  c0,0,0.1,0.1,0.1,0.2c0.2,0.3,0.4,0.6,0.7,0.9c2.6,3.1,7.4,7.6,7.4,7.6s4.8-4.5,7.4-7.5c0.2-0.3,0.5-0.6,0.7-0.9
-  C20.1,15.8,20.2,15.8,20.2,15.7z`}
-              />
-            </svg>
+            <HoverCard shadow={'md'} width={280}>
+              <HoverCard.Target>
+                <svg
+                  className={'fill-[#228BE6]'}
+                  fill={'none'}
+                  height={'24'}
+                  stroke={'white'}
+                  strokeLinecap={'round'}
+                  strokeLinejoin={'round'}
+                  strokeWidth={'2'}
+                  viewBox={'0 0 24 24'}
+                  width={'24'}
+                  xmlns={'http://www.w3.org/2000/svg'}
+                >
+                  <path d={'M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z'} />
+                  <circle cx={'12'} cy={'10'} r={'3'} />
+                </svg>
+              </HoverCard.Target>
+              <HoverCard.Dropdown>
+                <Text className={'text-xs font-medium'}>
+                  {location.qrcode.emoji && (
+                    <span className={'mr-2'}>{location.qrcode.emoji}</span>
+                  )}
+                  <span>{location.qrcode.name}</span>
+                </Text>
+                <Text className={'mt-4 text-xs font-medium text-neutral-600'}>
+                  見つかった日時：
+                  {format(
+                    new Date(location.createdAt.toString()),
+                    'yyyy/MM/dd HH:mm:ss',
+                  )}
+                </Text>
+              </HoverCard.Dropdown>
+            </HoverCard>
           </Marker>
         ))}
       </ReactMapGl>
