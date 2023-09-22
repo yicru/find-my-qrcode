@@ -1,10 +1,12 @@
 'use client'
 
 import { CreateQRCodeModal } from '@/client/components/CreateQRCodeModal'
+import { DeleteQRCodeModal } from '@/client/components/DeleteQRCodeModal'
 import { Map } from '@/client/components/Map'
 import { ShowQRCodeModal } from '@/client/components/ShowQRCodeModal'
 import { client } from '@/client/lib/client'
 import { Box, Button, Group, Table, Text } from '@mantine/core'
+import { EyeIcon, TrashIcon } from 'lucide-react'
 import useSWR from 'swr'
 
 export default function Home() {
@@ -71,8 +73,27 @@ export default function Home() {
                   <ShowQRCodeModal
                     qrcode={qrcode}
                     renderTrigger={(props) => (
-                      <Button size={'xs'} variant={'light'} {...props}>
-                        QRコードを表示
+                      <Button
+                        leftSection={<EyeIcon className={'h-3 w-3'} />}
+                        size={'xs'}
+                        variant={'light'}
+                        {...props}
+                      >
+                        表示
+                      </Button>
+                    )}
+                  />
+                  <DeleteQRCodeModal
+                    qrcode={qrcode}
+                    renderTrigger={(props) => (
+                      <Button
+                        className={'ml-2'}
+                        leftSection={<TrashIcon className={'h-3 w-3'} />}
+                        size={'xs'}
+                        variant={'default'}
+                        {...props}
+                      >
+                        削除
                       </Button>
                     )}
                   />

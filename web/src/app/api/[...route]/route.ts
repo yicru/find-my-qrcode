@@ -39,6 +39,26 @@ const route = app
       })
     },
   )
+  .delete(
+    '/qrcodes/:id',
+    zValidator(
+      'param',
+      z.object({
+        id: z.string().min(1),
+      }),
+    ),
+    async (c) => {
+      const param = c.req.valid('param')
+
+      return c.jsonT({
+        data: await prisma.qrcode.delete({
+          where: {
+            id: param.id,
+          },
+        }),
+      })
+    },
+  )
   .post(
     '/qrcodes/:id/find',
     zValidator(
@@ -83,6 +103,6 @@ const route = app
 
 const fetch = app.fetch
 
-export { fetch as GET, fetch as POST }
+export { fetch as GET, fetch as PUT, fetch as POST, fetch as DELETE }
 
 export type AppType = typeof route
